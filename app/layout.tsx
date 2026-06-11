@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import BillBot from '../components/BillBot'
+import { loadSiteTheme, buildThemeStyleTag } from '../lib/theme-loader'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://billslash.app'),
@@ -24,10 +25,14 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const theme = await loadSiteTheme('billslash')
+  const themeStyle = buildThemeStyleTag(theme, { background: '#f8fafc', primary: '#2563eb', secondary: '#16a34a' })
+
   return (
     <html lang="en">
       <head>
+        {themeStyle && <style dangerouslySetInnerHTML={{ __html: themeStyle }} />}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />

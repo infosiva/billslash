@@ -1,213 +1,291 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
-
-const SAVINGS_TICKER = ['$47/mo on Comcast', '$180/mo on rent', '$28/mo on AT&T', '$62/mo on insurance', '$34/mo on T-Mobile', '$95/mo on Spectrum']
+import { useState, useEffect, useRef } from 'react'
 
 const BILL_CATEGORIES = [
-  { icon: '🏠', label: 'Rent', desc: 'Negotiate lease renewal or move-in rate', color: '#10b981' },
-  { icon: '📱', label: 'Phone', desc: 'AT&T, T-Mobile, Verizon, EE, O2', color: '#3b82f6' },
-  { icon: '🌐', label: 'Internet', desc: 'Comcast, Spectrum, Virgin Media', color: '#8b5cf6' },
-  { icon: '🛡️', label: 'Insurance', desc: 'Auto, home, renters, health', color: '#f59e0b' },
-  { icon: '📺', label: 'Subscriptions', desc: 'Streaming, gym, software, memberships', color: '#ec4899' },
-  { icon: '⚡', label: 'Utilities', desc: 'Electric, gas, water providers', color: '#06b6d4' },
-  { icon: '💳', label: 'Credit Cards', desc: 'APR reduction, fee waivers', color: '#f97316' },
-  { icon: '🚗', label: 'Car Payments', desc: 'Refinance, dealership loyalty deals', color: '#84cc16' },
+  { icon: '🏠', label: 'Rent', color: '#2563eb' },
+  { icon: '📱', label: 'Phone', color: '#7c3aed' },
+  { icon: '🌐', label: 'Internet', color: '#0891b2' },
+  { icon: '🛡️', label: 'Insurance', color: '#d97706' },
+  { icon: '📺', label: 'Subscriptions', color: '#dc2626' },
+  { icon: '⚡', label: 'Utilities', color: '#16a34a' },
+  { icon: '💳', label: 'Credit Cards', color: '#9333ea' },
+  { icon: '🚗', label: 'Car Payments', color: '#0369a1' },
+]
+
+const DEMO_LINES = [
+  "Hi, I've been a Comcast customer for 3 years.",
+  "I recently received a promotional offer from Spectrum",
+  "for $65/month — $47 less than my current rate.",
+  "I'd like to discuss matching or beating that offer,",
+  "otherwise I'll need to switch providers next week.",
+  "",
+  "— Result: Rate reduced to $89/mo. Saved $58/mo. ✓",
 ]
 
 const STEPS = [
-  { n: '01', title: 'Pick your bill', desc: 'Rent, phone, internet, insurance — any recurring cost' },
-  { n: '02', title: 'Tell us your situation', desc: 'Provider, amount, how long you\'ve been a customer' },
-  { n: '03', title: 'Get your script', desc: 'AI writes word-for-word email or call script' },
-  { n: '04', title: 'Send. Save.', desc: 'Track outcomes. Average saving: $40/mo' },
+  { n: 1, title: 'Pick your bill', desc: 'Rent, phone, internet, insurance, any recurring cost' },
+  { n: 2, title: 'Add your details', desc: "Provider, current amount, how long you've been a customer" },
+  { n: 3, title: 'Get your script', desc: 'AI writes a word-for-word email or call script' },
+  { n: 4, title: 'Send and save', desc: 'Copy, send, track your outcome' },
 ]
 
-export default function Home() {
-  const [tickerIndex, setTickerIndex] = useState(0)
-  const [tickerVisible, setTickerVisible] = useState(true)
+const WINS = [
+  { bill: 'Comcast Internet', before: '$147', after: '$89', saved: '$58/mo', type: 'Email script' },
+  { bill: 'AT&T Wireless', before: '$95', after: '$65', saved: '$30/mo', type: 'Call script' },
+  { bill: 'State Farm Auto', before: '$210', after: '$158', saved: '$52/mo', type: 'Email script' },
+]
+
+function DemoPanel() {
+  const [lineIndex, setLineIndex] = useState(0)
+  const [charIndex, setCharIndex] = useState(0)
+  const [displayed, setDisplayed] = useState<string[]>([])
+  const [showResult, setShowResult] = useState(false)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTickerVisible(false)
-      setTimeout(() => {
-        setTickerIndex(i => (i + 1) % SAVINGS_TICKER.length)
-        setTickerVisible(true)
-      }, 300)
-    }, 2800)
-    return () => clearInterval(interval)
-  }, [])
+    if (lineIndex >= DEMO_LINES.length - 1) {
+      setTimeout(() => setShowResult(true), 400)
+      return
+    }
+    const line = DEMO_LINES[lineIndex]
+    if (charIndex < line.length) {
+      timerRef.current = setTimeout(() => setCharIndex(c => c + 1), 28)
+    } else {
+      timerRef.current = setTimeout(() => {
+        setDisplayed(d => [...d, line])
+        setCharIndex(0)
+        setLineIndex(i => i + 1)
+      }, line === '' ? 120 : 220)
+    }
+    return () => { if (timerRef.current) clearTimeout(timerRef.current) }
+  }, [lineIndex, charIndex])
 
+  const currentLine = lineIndex < DEMO_LINES.length - 1 ? DEMO_LINES[lineIndex].slice(0, charIndex) : ''
+
+  return (
+    <div style={{
+      background: '#fff',
+      border: '1px solid rgba(15,23,42,0.1)',
+      borderRadius: 16,
+      overflow: 'hidden',
+      boxShadow: '0 8px 40px rgba(15,23,42,0.08), 0 2px 8px rgba(15,23,42,0.04)',
+    }}>
+      {/* Header bar */}
+      <div style={{
+        background: '#f8fafc',
+        borderBottom: '1px solid rgba(15,23,42,0.07)',
+        padding: '12px 18px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 32, height: 32, background: 'rgba(37,99,235,0.1)',
+            borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 16,
+          }}>🌐</div>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: '#0f172a' }}>Comcast Xfinity — $147/mo</div>
+            <div style={{ fontSize: 11, color: '#94a3b8' }}>Internet · 3 years customer</div>
+          </div>
+        </div>
+        <span className="pill pill-blue" style={{ fontSize: 11 }}>AI Script</span>
+      </div>
+
+      {/* Script body */}
+      <div style={{ padding: '18px 20px', minHeight: 180 }}>
+        <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 10, fontWeight: 500 }}>
+          Generated negotiation email
+        </div>
+        <div style={{
+          fontFamily: 'ui-monospace, monospace',
+          fontSize: 12.5, lineHeight: 1.7, color: '#334155',
+        }}>
+          {displayed.map((line, i) => (
+            <div key={i}>{line || <br />}</div>
+          ))}
+          {lineIndex < DEMO_LINES.length - 1 && (
+            <span>
+              {currentLine}
+              <span style={{ animation: 'blink 1s step-end infinite', borderLeft: '2px solid #2563eb', marginLeft: 1 }}>&nbsp;</span>
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Result badge */}
+      {showResult && (
+        <div style={{
+          margin: '0 18px 18px',
+          background: 'rgba(22,163,74,0.06)',
+          border: '1px solid rgba(22,163,74,0.2)',
+          borderRadius: 10, padding: '12px 16px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          animation: 'savingsPop 0.4s cubic-bezier(0.23,1,0.32,1) forwards',
+        }}>
+          <div>
+            <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 2 }}>Rate reduced</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: '#0f172a' }}>
+              $147 → $89/mo
+            </div>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: 20, fontWeight: 800, color: '#16a34a' }}>$58/mo</div>
+            <div style={{ fontSize: 11, color: '#94a3b8' }}>saved</div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default function Home() {
   return (
     <>
       {/* Nav */}
       <nav style={{
         position: 'sticky', top: 0, zIndex: 50,
-        background: 'rgba(11, 17, 32, 0.85)',
+        background: 'rgba(248,250,252,0.9)',
         backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        borderBottom: '1px solid rgba(15,23,42,0.07)',
         padding: '0 24px', height: 56,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
-        <span style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', color: '#f1f5f9' }}>
-          Bill<span style={{ color: '#10b981' }}>Slash</span>
+        <span style={{ fontSize: 20, fontWeight: 900, letterSpacing: '-0.5px', color: '#0f172a' }}>
+          Bill<span style={{ color: '#2563eb' }}>Slash</span>
         </span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <Link href="/negotiate" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Link href="/negotiate" style={{ color: '#475569', textDecoration: 'none', fontSize: 14, fontWeight: 500, padding: '6px 10px' }}>
             Negotiate
           </Link>
-          <Link href="/savings" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>
-            Savings Board
-          </Link>
-          <Link href="/negotiate" className="btn-primary" style={{ padding: '8px 16px', fontSize: 14, borderRadius: 8, textDecoration: 'none', display: 'inline-block' }}>
-            Try Free →
+          <Link href="/negotiate" className="btn-primary" style={{ padding: '8px 18px', fontSize: 14, borderRadius: 8, textDecoration: 'none', display: 'inline-block' }}>
+            Try free →
           </Link>
         </div>
       </nav>
 
-      <main>
+      <main style={{ background: '#f8fafc' }}>
         {/* Hero */}
         <section style={{
-          maxWidth: 1200, margin: '0 auto', padding: '80px 24px 64px',
-          display: 'grid', gridTemplateColumns: '1fr 420px', gap: 64, alignItems: 'center',
+          maxWidth: 1160, margin: '0 auto', padding: '72px 24px 56px',
+          display: 'grid', gridTemplateColumns: '1fr 440px', gap: 72, alignItems: 'center',
         }}>
+          {/* Left */}
           <div>
-            {/* Live ticker */}
             <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 24,
-              background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.2)',
-              borderRadius: 999, padding: '6px 14px',
+              display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 24,
+              background: '#fff', border: '1px solid rgba(15,23,42,0.08)',
+              borderRadius: 999, padding: '5px 14px',
+              boxShadow: '0 1px 4px rgba(15,23,42,0.06)',
             }}>
-              <span style={{
-                width: 8, height: 8, borderRadius: '50%', background: '#10b981',
-                boxShadow: '0 0 8px rgba(16,185,129,0.6)', display: 'inline-block', flexShrink: 0,
-              }} />
-              <span style={{ fontSize: 13, color: '#94a3b8' }}>Latest: </span>
-              <span style={{
-                fontSize: 13, fontWeight: 600, color: '#10b981',
-                transition: 'opacity 0.3s, transform 0.3s',
-                opacity: tickerVisible ? 1 : 0,
-                transform: tickerVisible ? 'translateY(0)' : 'translateY(4px)',
-              }}>
-                Someone saved {SAVINGS_TICKER[tickerIndex]}
+              <span style={{ fontSize: 14 }}>✂️</span>
+              <span style={{ fontSize: 13, color: '#475569', fontWeight: 500 }}>
+                AI writes your negotiation script
               </span>
             </div>
 
             <h1 style={{
-              fontSize: 'clamp(36px, 5vw, 62px)', fontWeight: 900,
-              lineHeight: 1.08, letterSpacing: '-1.5px', color: '#f1f5f9', marginBottom: 20,
+              fontSize: 'clamp(36px, 5vw, 58px)', fontWeight: 900,
+              lineHeight: 1.06, letterSpacing: '-1.5px', color: '#0f172a', marginBottom: 20,
             }}>
               Stop overpaying.<br />
-              <span style={{ color: '#10b981' }}>AI writes your</span><br />
-              negotiation script.
+              <span style={{ color: '#2563eb' }}>Get the script.</span><br />
+              Cut your bills.
             </h1>
 
-            <p style={{ fontSize: 18, color: '#94a3b8', lineHeight: 1.6, marginBottom: 32, maxWidth: 480 }}>
-              Rent too high. Phone bill creeping up. Internet provider ignoring you. BillSlash generates word-for-word scripts — email or phone — for any recurring bill. Copy. Send. Save.
+            <p style={{ fontSize: 17, color: '#475569', lineHeight: 1.65, marginBottom: 32, maxWidth: 440 }}>
+              BillSlash generates word-for-word negotiation scripts for rent, phone, internet, insurance, and more. Copy, send, save hundreds per year.
             </p>
 
-            <div style={{ display: 'flex', gap: 32, marginBottom: 36 }}>
-              {[{ val: '$40', label: 'avg saved/mo' }, { val: '8', label: 'bill categories' }, { val: '2 min', label: 'to generate' }].map(s => (
+            {/* Stats row */}
+            <div style={{ display: 'flex', gap: 36, marginBottom: 36 }}>
+              {[
+                { val: '$480', label: 'avg saved per year' },
+                { val: '8', label: 'bill categories' },
+                { val: '2 min', label: 'to generate' },
+              ].map(s => (
                 <div key={s.label}>
-                  <div style={{ fontSize: 28, fontWeight: 800, color: '#10b981', letterSpacing: '-0.5px' }}>{s.val}</div>
-                  <div style={{ fontSize: 12, color: '#64748b', fontWeight: 500 }}>{s.label}</div>
+                  <div style={{ fontSize: 26, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px' }}>{s.val}</div>
+                  <div style={{ fontSize: 12, color: '#94a3b8', fontWeight: 500 }}>{s.label}</div>
                 </div>
               ))}
             </div>
 
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <Link href="/negotiate" className="btn-primary" style={{ padding: '14px 28px', fontSize: 16, borderRadius: 10, textDecoration: 'none', display: 'inline-block' }}>
-                Start negotiating — it&apos;s free →
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 16 }}>
+              <Link href="/negotiate" className="btn-primary" style={{ padding: '13px 26px', fontSize: 15, borderRadius: 10, textDecoration: 'none', display: 'inline-block' }}>
+                Start negotiating — free →
               </Link>
-              <Link href="/savings" className="btn-ghost" style={{ padding: '14px 28px', fontSize: 16, borderRadius: 10, textDecoration: 'none', display: 'inline-block' }}>
-                See real savings
+              <Link href="/negotiate" className="btn-ghost" style={{ padding: '13px 22px', fontSize: 15, borderRadius: 10, textDecoration: 'none', display: 'inline-block' }}>
+                See how it works
               </Link>
             </div>
-
-            <p style={{ fontSize: 12, color: '#475569', marginTop: 12 }}>
-              2 free negotiations/month. No credit card. Pro: $9/mo for unlimited.
-            </p>
+            <p style={{ fontSize: 12, color: '#94a3b8' }}>2 free scripts/month. No credit card.</p>
           </div>
 
-          {/* Right: Animated bill card */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <div style={{
-              background: '#111827', border: '1px solid rgba(16, 185, 129, 0.2)',
-              borderRadius: 16, padding: 24,
-              animation: 'floatBill 4s ease-in-out infinite',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(16, 185, 129, 0.05)',
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
-                <div>
-                  <div style={{ fontSize: 12, color: '#475569', marginBottom: 4 }}>Comcast Xfinity</div>
-                  <div style={{ fontSize: 24, fontWeight: 800, color: '#f1f5f9' }}>$147<span style={{ fontSize: 14, color: '#64748b' }}>/mo</span></div>
-                </div>
-                <span className="pill pill-amber">Before</span>
-              </div>
-              <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '12px 0' }} />
-              <div style={{ fontSize: 13, color: '#64748b', marginBottom: 8 }}>AI Script Generated ✓</div>
-              <div style={{
-                background: 'rgba(16, 185, 129, 0.06)', border: '1px solid rgba(16, 185, 129, 0.15)',
-                borderRadius: 8, padding: '10px 12px', fontSize: 12, color: '#94a3b8', lineHeight: 1.6,
-              }}>
-                &quot;Hi, I&apos;ve been a loyal Xfinity customer for 3 years. I noticed my current rate increased...&quot;
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 }}>
-                <span style={{ fontSize: 13, color: '#10b981', fontWeight: 600 }}>New rate: $99/mo</span>
-                <span className="pill pill-emerald">Saved $48/mo</span>
-              </div>
-            </div>
+          {/* Right: animated demo */}
+          <DemoPanel />
+        </section>
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {BILL_CATEGORIES.slice(0, 6).map(cat => (
-                <div key={cat.label} style={{
-                  display: 'flex', alignItems: 'center', gap: 6,
-                  background: '#111827', border: '1px solid rgba(255,255,255,0.06)',
-                  borderRadius: 8, padding: '6px 10px', fontSize: 12, color: '#94a3b8',
-                }}>
-                  <span>{cat.icon}</span>{cat.label}
+        {/* Recent wins strip */}
+        <section style={{ background: '#fff', borderTop: '1px solid rgba(15,23,42,0.06)', borderBottom: '1px solid rgba(15,23,42,0.06)', padding: '28px 24px' }}>
+          <div style={{ maxWidth: 1160, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 32, overflowX: 'auto' }}>
+            <span style={{ fontSize: 12, color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', flexShrink: 0 }}>Recent wins</span>
+            {WINS.map((w, i) => (
+              <div key={i} style={{
+                display: 'flex', alignItems: 'center', gap: 14,
+                flexShrink: 0, padding: '10px 18px',
+                background: '#f8fafc', borderRadius: 10, border: '1px solid rgba(15,23,42,0.07)',
+              }}>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#0f172a' }}>{w.bill}</div>
+                  <div style={{ fontSize: 11, color: '#94a3b8' }}>{w.type}</div>
                 </div>
-              ))}
-            </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}>
+                  <span style={{ color: '#94a3b8', textDecoration: 'line-through' }}>{w.before}</span>
+                  <span style={{ color: '#475569' }}>→</span>
+                  <span style={{ color: '#0f172a', fontWeight: 700 }}>{w.after}</span>
+                </div>
+                <span className="pill pill-green" style={{ fontSize: 11 }}>-{w.saved}</span>
+              </div>
+            ))}
           </div>
         </section>
 
-        <style>{`
-          @media (max-width: 768px) {
-            section { grid-template-columns: 1fr !important; }
-            section > div:last-child { display: none !important; }
-          }
-        `}</style>
-
         {/* Bill categories */}
-        <section style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px 80px' }}>
-          <h2 style={{ fontSize: 14, fontWeight: 600, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 20 }}>
-            Works on every recurring bill
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
+        <section style={{ maxWidth: 1160, margin: '0 auto', padding: '64px 24px 56px' }}>
+          <div style={{ marginBottom: 32 }}>
+            <h2 style={{ fontSize: 'clamp(22px, 3vw, 30px)', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px', marginBottom: 8 }}>
+              Works on every recurring bill
+            </h2>
+            <p style={{ fontSize: 15, color: '#64748b' }}>Pick your bill type and we'll generate the right script for that provider.</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 10 }}>
             {BILL_CATEGORIES.map((cat, i) => (
               <Link key={cat.label} href={`/negotiate?type=${cat.label.toLowerCase()}`} style={{ textDecoration: 'none' }}>
-                <div
-                  style={{
-                    background: '#111827', border: '1px solid rgba(255,255,255,0.06)',
-                    borderRadius: 12, padding: '16px 18px', cursor: 'pointer',
-                    transition: 'border-color 150ms, background 150ms',
-                    animation: `fadeUp 0.4s cubic-bezier(0.23,1,0.32,1) ${i * 0.05}s both`,
-                  }}
+                <div style={{
+                  background: '#fff', border: '1px solid rgba(15,23,42,0.08)',
+                  borderRadius: 12, padding: '18px 18px',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12,
+                  transition: 'border-color 150ms, box-shadow 150ms, transform 100ms',
+                  animation: `fadeUp 0.35s cubic-bezier(0.23,1,0.32,1) ${i * 0.04}s both`,
+                  boxShadow: '0 1px 3px rgba(15,23,42,0.04)',
+                }}
                   onMouseEnter={e => {
                     const el = e.currentTarget as HTMLDivElement
                     el.style.borderColor = cat.color + '40'
-                    el.style.background = '#1a2332'
+                    el.style.boxShadow = `0 4px 16px rgba(15,23,42,0.08)`
+                    el.style.transform = 'translateY(-1px)'
                   }}
                   onMouseLeave={e => {
                     const el = e.currentTarget as HTMLDivElement
-                    el.style.borderColor = 'rgba(255,255,255,0.06)'
-                    el.style.background = '#111827'
+                    el.style.borderColor = 'rgba(15,23,42,0.08)'
+                    el.style.boxShadow = '0 1px 3px rgba(15,23,42,0.04)'
+                    el.style.transform = 'translateY(0)'
                   }}
                 >
-                  <div style={{ fontSize: 24, marginBottom: 8 }}>{cat.icon}</div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: '#f1f5f9', marginBottom: 4 }}>{cat.label}</div>
-                  <div style={{ fontSize: 12, color: '#64748b' }}>{cat.desc}</div>
+                  <span style={{ fontSize: 22 }}>{cat.icon}</span>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: '#0f172a' }}>{cat.label}</span>
                 </div>
               </Link>
             ))}
@@ -216,68 +294,86 @@ export default function Home() {
 
         {/* How it works */}
         <section style={{
-          borderTop: '1px solid rgba(255,255,255,0.06)',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
-          background: 'rgba(17, 24, 39, 0.5)',
+          background: '#fff',
+          borderTop: '1px solid rgba(15,23,42,0.06)',
+          borderBottom: '1px solid rgba(15,23,42,0.06)',
           padding: '64px 24px',
         }}>
-          <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-            <h2 style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 800, textAlign: 'center', marginBottom: 48, letterSpacing: '-0.5px' }}>
+          <div style={{ maxWidth: 1160, margin: '0 auto' }}>
+            <h2 style={{ fontSize: 'clamp(22px, 3vw, 30px)', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px', marginBottom: 40, textAlign: 'center' }}>
               From bill to script in 2 minutes
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 24 }}>
               {STEPS.map((step, i) => (
-                <div key={step.n} style={{ display: 'flex', flexDirection: 'column', gap: 12, animation: `fadeUp 0.4s cubic-bezier(0.23,1,0.32,1) ${i * 0.08}s both` }}>
+                <div key={step.n} style={{
+                  display: 'flex', flexDirection: 'column', gap: 10,
+                  animation: `fadeUp 0.4s cubic-bezier(0.23,1,0.32,1) ${i * 0.07}s both`,
+                }}>
                   <div style={{
-                    width: 40, height: 40, background: 'rgba(16, 185, 129, 0.1)',
-                    border: '1px solid rgba(16, 185, 129, 0.2)', borderRadius: 10,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 13, fontWeight: 700, color: '#10b981',
+                    width: 36, height: 36,
+                    background: 'rgba(37,99,235,0.08)', border: '1px solid rgba(37,99,235,0.2)',
+                    borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 14, fontWeight: 700, color: '#2563eb',
                   }}>
                     {step.n}
                   </div>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: '#f1f5f9' }}>{step.title}</div>
-                  <div style={{ fontSize: 14, color: '#64748b', lineHeight: 1.5 }}>{step.desc}</div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: '#0f172a' }}>{step.title}</div>
+                  <div style={{ fontSize: 13, color: '#64748b', lineHeight: 1.55 }}>{step.desc}</div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* CTA banner */}
-        <section style={{ maxWidth: 1200, margin: '0 auto', padding: '80px 24px' }}>
+        {/* CTA */}
+        <section style={{ maxWidth: 1160, margin: '0 auto', padding: '72px 24px' }}>
           <div style={{
-            background: 'linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(16,185,129,0.03) 100%)',
-            border: '1px solid rgba(16, 185, 129, 0.2)',
-            borderRadius: 20, padding: '48px 40px',
+            background: '#2563eb',
+            borderRadius: 20, padding: '52px 48px',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 32, flexWrap: 'wrap',
           }}>
             <div>
-              <h2 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.5px', marginBottom: 8 }}>
+              <h2 style={{ fontSize: 'clamp(22px, 3vw, 30px)', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: 8, color: '#fff' }}>
                 Your next bill is due soon.
               </h2>
-              <p style={{ color: '#94a3b8', fontSize: 16 }}>Don&apos;t just pay it. Negotiate it. Takes 2 minutes.</p>
+              <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 16 }}>Don't just pay it. Get the script, negotiate it down.</p>
             </div>
-            <Link href="/negotiate" className="btn-primary" style={{ padding: '14px 32px', fontSize: 16, borderRadius: 10, textDecoration: 'none', display: 'inline-block', whiteSpace: 'nowrap' }}>
-              Get my script — free →
+            <Link href="/negotiate" style={{
+              background: '#fff', color: '#2563eb',
+              fontWeight: 700, padding: '14px 32px', fontSize: 15,
+              borderRadius: 10, textDecoration: 'none', display: 'inline-block', whiteSpace: 'nowrap',
+              transition: 'box-shadow 150ms, transform 100ms',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.2)'; (e.currentTarget as HTMLAnchorElement).style.transform = 'translateY(-1px)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)'; (e.currentTarget as HTMLAnchorElement).style.transform = 'translateY(0)' }}
+            >
+              Get my free script →
             </Link>
           </div>
         </section>
       </main>
 
       <footer style={{
-        borderTop: '1px solid rgba(255,255,255,0.06)', padding: '24px',
+        borderTop: '1px solid rgba(15,23,42,0.07)', padding: '24px',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        flexWrap: 'wrap', gap: 12, maxWidth: 1200, margin: '0 auto',
+        flexWrap: 'wrap', gap: 12, maxWidth: 1160, margin: '0 auto',
+        background: '#f8fafc',
       }}>
-        <span style={{ fontSize: 14, fontWeight: 700, color: '#f1f5f9' }}>Bill<span style={{ color: '#10b981' }}>Slash</span></span>
+        <span style={{ fontSize: 14, fontWeight: 800, color: '#0f172a' }}>Bill<span style={{ color: '#2563eb' }}>Slash</span></span>
         <div style={{ display: 'flex', gap: 20 }}>
-          {['Negotiate', 'Savings Board', 'Privacy'].map(l => (
-            <Link key={l} href={`/${l.toLowerCase().replace(' ', '-')}`} style={{ fontSize: 13, color: '#475569', textDecoration: 'none' }}>{l}</Link>
+          {['Negotiate', 'Privacy'].map(l => (
+            <Link key={l} href={`/${l.toLowerCase()}`} style={{ fontSize: 13, color: '#94a3b8', textDecoration: 'none' }}>{l}</Link>
           ))}
         </div>
-        <span style={{ fontSize: 12, color: '#334155' }}>© 2026 BillSlash</span>
+        <span style={{ fontSize: 12, color: '#cbd5e1' }}>© 2026 BillSlash</span>
       </footer>
+
+      <style>{`
+        @media (max-width: 768px) {
+          section:first-of-type { grid-template-columns: 1fr !important; gap: 40px !important; }
+        }
+      `}</style>
     </>
   )
 }

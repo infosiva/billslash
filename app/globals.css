@@ -1,19 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #0b1120;
-  --bg-card: #111827;
-  --bg-elevated: #1a2332;
-  --border: rgba(16, 185, 129, 0.15);
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --emerald: #10b981;
-  --emerald-dim: #059669;
-  --emerald-glow: rgba(16, 185, 129, 0.12);
-  --text: #f1f5f9;
-  --text-muted: #94a3b8;
-  --text-dim: #475569;
-  --red: #ef4444;
-  --amber: #f59e0b;
+  --bg: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-elevated: #f1f5f9;
+  --border: rgba(37, 99, 235, 0.18);
+  --border-subtle: rgba(15, 23, 42, 0.08);
+  --blue: #2563eb;
+  --blue-dim: #1d4ed8;
+  --blue-glow: rgba(37, 99, 235, 0.12);
+  --blue-light: rgba(37, 99, 235, 0.08);
+  --green: #16a34a;
+  --green-light: rgba(22, 163, 74, 0.1);
+  --text: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #94a3b8;
+  --red: #dc2626;
+  --amber: #d97706;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,50 +33,24 @@ body {
   min-height: 100dvh;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
-  background-size: 48px 48px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-body::after {
-  content: '';
-  position: fixed;
-  top: -200px;
-  left: -200px;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-main, nav, header, footer, section { position: relative; z-index: 1; }
-
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
-::selection { background: rgba(16, 185, 129, 0.2); }
+::selection { background: rgba(37, 99, 235, 0.15); }
 
-:focus-visible { outline: 2px solid var(--emerald); outline-offset: 2px; border-radius: 4px; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 4px; }
 
 .btn-primary {
-  background: var(--emerald);
-  color: #000;
+  background: var(--blue);
+  color: #fff;
   font-weight: 600;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background 150ms, transform 100ms, box-shadow 150ms;
 }
-.btn-primary:hover { background: #0ea572; box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+.btn-primary:hover { background: var(--blue-dim); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3); }
 .btn-primary:active { transform: scale(0.97); }
 
 .btn-ghost {
@@ -82,21 +59,21 @@ main, nav, header, footer, section { position: relative; z-index: 1; }
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
   cursor: pointer;
-  transition: border-color 150ms, color 150ms, transform 100ms;
+  transition: border-color 150ms, color 150ms, transform 100ms, background 150ms;
 }
-.btn-ghost:hover { border-color: var(--emerald); color: var(--text); }
+.btn-ghost:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
 .btn-ghost:active { transform: scale(0.97); }
 
 .input-field {
-  background: var(--bg);
+  background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
   color: var(--text);
   transition: border-color 150ms, box-shadow 150ms;
 }
 .input-field:focus {
-  border-color: var(--emerald);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
   outline: none;
 }
 
@@ -109,16 +86,23 @@ main, nav, header, footer, section { position: relative; z-index: 1; }
   font-size: 12px;
   font-weight: 500;
 }
-.pill-emerald {
-  background: rgba(16, 185, 129, 0.1);
-  color: var(--emerald);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+.pill-blue {
+  background: var(--blue-light);
+  color: var(--blue);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+}
+.pill-green {
+  background: var(--green-light);
+  color: var(--green);
+  border: 1px solid rgba(22, 163, 74, 0.2);
 }
 .pill-amber {
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(217, 119, 6, 0.08);
   color: var(--amber);
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(217, 119, 6, 0.2);
 }
+/* keep legacy names for negotiate page */
+.pill-emerald { background: var(--green-light); color: var(--green); border: 1px solid rgba(22, 163, 74, 0.2); }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
@@ -128,28 +112,30 @@ main, nav, header, footer, section { position: relative; z-index: 1; }
   from { opacity: 0; }
   to { opacity: 1; }
 }
-@keyframes floatBill {
-  0%, 100% { transform: translateY(0px) rotate(-1deg); }
-  50% { transform: translateY(-8px) rotate(1deg); }
+@keyframes typeChar {
+  from { width: 0; }
+  to { width: 100%; }
 }
-@keyframes shimmerLoad {
-  from { background-position: -200% 0; }
-  to { background-position: 200% 0; }
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
-@keyframes countUp {
-  from { transform: translateY(100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes savingsPop {
+  0% { transform: scale(0.85) translateY(8px); opacity: 0; }
+  60% { transform: scale(1.05) translateY(-2px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+@keyframes progressFill {
+  from { width: 0%; }
+  to { width: 68%; }
 }
 
 .animate-fade-up { animation: fadeUp 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
 .animate-fade-in { animation: fadeIn 0.3s ease forwards; }
-.animate-float { animation: floatBill 4s ease-in-out infinite; }
-
-.shimmer-loading {
-  background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-elevated) 50%, var(--bg-card) 75%);
-  background-size: 200% 100%;
-  animation: shimmerLoad 1.5s infinite;
-}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
