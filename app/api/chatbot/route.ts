@@ -1,3 +1,4 @@
+import { reportToTaskFlow } from '@/lib/reportToTaskFlow'
 import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 
@@ -40,6 +41,7 @@ export async function POST(req: NextRequest) {
     })
 
     const content = completion.choices[0]?.message?.content || ''
+    void reportToTaskFlow({ project: 'billslash', agentName: 'ChatBot', status: 'completed', message: 'Chat message processed' })
     return NextResponse.json({ content })
 
   } catch (err) {

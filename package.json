@@ -12,6 +12,7 @@
     "@auth/drizzle-adapter": "^1.11.2",
     "@neondatabase/serverless": "^1.1.0",
     "@stripe/stripe-js": "^9.8.0",
+    "@vercel/edge-config": "^1.4.3",
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
     "groq-sdk": "^1.2.1",
