@@ -31,11 +31,6 @@ const STEPS = [
   { n: 4, title: 'Send and save', desc: 'Copy, send, track your outcome' },
 ]
 
-const WINS = [
-  { bill: 'Comcast Internet', before: '$147', after: '$89', saved: '$58/mo', type: 'Email script' },
-  { bill: 'AT&T Wireless', before: '$95', after: '$65', saved: '$30/mo', type: 'Call script' },
-  { bill: 'State Farm Auto', before: '$210', after: '$158', saved: '$52/mo', type: 'Email script' },
-]
 
 function DemoPanel() {
   const [lineIndex, setLineIndex] = useState(0)
@@ -198,17 +193,23 @@ export default function Home() {
               BillSlash generates word-for-word negotiation scripts for rent, phone, internet, insurance, and more. Copy, send, save hundreds per year.
             </p>
 
-            {/* Stats row */}
-            <div style={{ display: 'flex', gap: 36, marginBottom: 36 }}>
+            {/* Feature pills row */}
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 36 }}>
               {[
-                { val: '$480', label: 'avg saved per year' },
-                { val: '8', label: 'bill categories' },
-                { val: '2 min', label: 'to generate' },
-              ].map(s => (
-                <div key={s.label}>
-                  <div style={{ fontSize: 26, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px' }}>{s.val}</div>
-                  <div style={{ fontSize: 12, color: '#94a3b8', fontWeight: 500 }}>{s.label}</div>
-                </div>
+                { label: '✂️ AI-powered scripts', color: '#2563eb' },
+                { label: '📋 8 bill categories', color: '#0891b2' },
+                { label: '⚡ Ready in 2 minutes', color: '#16a34a' },
+                { label: '🔒 No account needed', color: '#7c3aed' },
+              ].map(p => (
+                <span key={p.label} style={{
+                  fontSize: 12, fontWeight: 600,
+                  padding: '5px 12px', borderRadius: 99,
+                  background: 'rgba(15,23,42,0.04)',
+                  border: '1px solid rgba(15,23,42,0.08)',
+                  color: p.color,
+                }}>
+                  {p.label}
+                </span>
               ))}
             </div>
 
@@ -227,30 +228,6 @@ export default function Home() {
           <DemoPanel />
         </section>
 
-        {/* Recent wins strip */}
-        <section style={{ background: '#fff', borderTop: '1px solid rgba(15,23,42,0.06)', borderBottom: '1px solid rgba(15,23,42,0.06)', padding: '28px 24px' }}>
-          <div style={{ maxWidth: 1160, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 32, overflowX: 'auto' }}>
-            <span style={{ fontSize: 12, color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', flexShrink: 0 }}>Recent wins</span>
-            {WINS.map((w, i) => (
-              <div key={i} style={{
-                display: 'flex', alignItems: 'center', gap: 14,
-                flexShrink: 0, padding: '10px 18px',
-                background: '#f8fafc', borderRadius: 10, border: '1px solid rgba(15,23,42,0.07)',
-              }}>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: '#0f172a' }}>{w.bill}</div>
-                  <div style={{ fontSize: 11, color: '#94a3b8' }}>{w.type}</div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}>
-                  <span style={{ color: '#94a3b8', textDecoration: 'line-through' }}>{w.before}</span>
-                  <span style={{ color: '#475569' }}>→</span>
-                  <span style={{ color: '#0f172a', fontWeight: 700 }}>{w.after}</span>
-                </div>
-                <span className="pill pill-green" style={{ fontSize: 11 }}>-{w.saved}</span>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* Bill categories */}
         <section style={{ maxWidth: 1160, margin: '0 auto', padding: '64px 24px 56px' }}>
