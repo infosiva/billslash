@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import BillBot from '../components/BillBot'
+import FeedbackWidget from '@/components/FeedbackWidget'
 import { loadSiteTheme, buildThemeStyleTag } from '../lib/theme-loader'
 
 export const metadata: Metadata = {
@@ -59,6 +60,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         {children}
         <BillBot />
+        <FeedbackWidget siteName="BillSlash" />
       </body>
     </html>
   )
