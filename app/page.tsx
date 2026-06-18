@@ -222,6 +222,7 @@ export default function Home() {
               </Link>
             </div>
             <p style={{ fontSize: 12, color: '#94a3b8' }}>2 free scripts/month. No credit card.</p>
+            <p className="text-xs opacity-60 mt-2">Have a promo code? <a href="#promo" className="underline">Apply here</a></p>
           </div>
 
           {/* Right: animated demo */}
