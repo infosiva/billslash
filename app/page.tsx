@@ -147,8 +147,21 @@ export default function Home() {
         padding: '0 24px', height: 56,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
-        <span style={{ fontSize: 20, fontWeight: 900, letterSpacing: '-0.5px', color: '#0f172a' }}>
-          Bill<span style={{ color: '#2563eb' }}>Slash</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{
+            width: 24, height: 24, borderRadius: 6,
+            background: 'linear-gradient(135deg, #1d4ed8, #2563eb)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+          }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="2"/>
+              <path d="M12 7v7" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M8.5 11L12 14.5L15.5 11" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
+          <span style={{ fontSize: 20, fontWeight: 900, letterSpacing: '-0.5px', color: '#0f172a' }}>
+            Bill<span style={{ color: '#2563eb' }}>Slash</span>
+          </span>
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Link href="/negotiate" style={{ color: '#475569', textDecoration: 'none', fontSize: 14, fontWeight: 500, padding: '6px 10px' }}>
