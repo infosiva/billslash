@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
+import { AI_LIMITER } from '@/lib/rateLimit'
 
 let _groq: Groq | null = null
 function getGroq() {
@@ -67,6 +68,8 @@ Scripts should reference current market rates and competing lender offers.`,
 }
 
 export async function POST(req: NextRequest) {
+  const limited = AI_LIMITER.check(req); if (limited) return limited
+
   try {
     const { billType, provider, currentAmount, yearsCustomer, reason, scriptType } = await req.json()
 

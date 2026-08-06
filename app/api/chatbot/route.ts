@@ -1,6 +1,7 @@
 import { reportToTaskFlow } from '@/lib/reportToTaskFlow'
 import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
+import { AI_LIMITER } from '@/lib/rateLimit'
 
 let _groq: Groq | null = null
 function getGroq() {
@@ -23,6 +24,8 @@ If asked about something outside bill negotiation, respond:
 "I'm BillBot, trained to help with bill negotiations. For that question, try Google or ChatGPT!"`
 
 export async function POST(req: NextRequest) {
+  const limited = AI_LIMITER.check(req); if (limited) return limited
+
   try {
     const { messages } = await req.json()
 
