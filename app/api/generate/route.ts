@@ -93,7 +93,7 @@ ${reason ? `- Leverage/context: ${reason}` : ''}
 Write the complete, ready-to-send script. Be specific to ${provider}. Include realistic numbers where possible. Do NOT include any preamble or explanation — just the script itself.`
 
     const completion = await getGroq().chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+      model: 'openai/gpt-oss-20b',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 600,
       temperature: 0.7,

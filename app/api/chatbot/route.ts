@@ -33,22 +33,44 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid messages' }, { status: 400 })
     }
 
-    const completion = await getGroq().chat.completions.create({
-      model: 'llama-3.1-8b-instant',
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        ...messages.slice(-8),
-      ],
-      max_tokens: 300,
-      temperature: 0.6,
-    })
+    const chatMessages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...messages.slice(-8),
+    ]
 
-    const content = completion.choices[0]?.message?.content || ''
+    let content = ''
+    try {
+      const completion = await getGroq().chat.completions.create({
+        model: 'qwen/qwen3.8-27b',
+        messages: chatMessages,
+        max_tokens: 300,
+        temperature: 0.6,
+      })
+      content = completion.choices[0]?.message?.content || ''
+    } catch (groqErr) {
+      console.warn('chatbot groq failed, trying fallback model', groqErr)
+      try {
+        const completion = await getGroq().chat.completions.create({
+          model: 'openai/gpt-oss-20b',
+          messages: chatMessages,
+          max_tokens: 300,
+          temperature: 0.6,
+        })
+        content = completion.choices[0]?.message?.content || ''
+      } catch (fallbackErr) {
+        console.error('chatbot fallback also failed', fallbackErr)
+      }
+    }
+
+    if (!content) {
+      return NextResponse.json({ content: "Chat is resting — try again in a moment." })
+    }
+
     void reportToTaskFlow({ project: 'billslash', agentName: 'ChatBot', status: 'completed', message: 'Chat message processed' })
     return NextResponse.json({ content })
 
   } catch (err) {
     console.error('chatbot error:', err)
-    return NextResponse.json({ error: 'Failed to respond' }, { status: 500 })
+    return NextResponse.json({ content: "Chat is resting — try again in a moment." })
   }
 }
