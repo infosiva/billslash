@@ -5,6 +5,7 @@ import BillBot from '../components/BillBot'
 import FeedbackWidget from '@/components/FeedbackWidget'
 import { loadSiteTheme, buildThemeStyleTag } from '../lib/theme-loader'
 
+import { MotionProvider } from "@infosiva/shared-ui/modern";
 export const metadata: Metadata = {
   metadataBase: new URL('https://billslash.app'),
   title: 'BillSlash — AI Bill Negotiator | Cut Your Bills in Minutes',
@@ -66,7 +67,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body>
-        {children}
+        <MotionProvider>{children}</MotionProvider>
         <BillBot />
         <FeedbackWidget siteName="BillSlash" />
       </body>

@@ -1,6 +1,8 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { MagneticButton } from '@infosiva/shared-ui/modern'
 import { useState, useEffect, useRef } from 'react'
 
 const BILL_CATEGORIES = [
@@ -227,9 +229,9 @@ export default function Home() {
             </div>
 
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 16 }}>
-              <Link href="/negotiate" className="btn-primary" style={{ padding: '13px 26px', fontSize: 15, borderRadius: 10, textDecoration: 'none', display: 'inline-block' }}>
+              <MagneticButton onClick={() => router.push('/negotiate')} className="btn-primary" style={{ padding: '13px 26px', fontSize: 15, borderRadius: 10, display: 'inline-block', cursor: 'pointer' }}>
                 Start negotiating — free →
-              </Link>
+              </MagneticButton>
               <Link href="/negotiate" className="btn-ghost" style={{ padding: '13px 22px', fontSize: 15, borderRadius: 10, textDecoration: 'none', display: 'inline-block' }}>
                 See how it works
               </Link>
