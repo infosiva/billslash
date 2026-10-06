@@ -3,13 +3,13 @@ import Script from 'next/script'
 import './globals.css'
 import BillBot from '../components/BillBot'
 import FeedbackWidget from '@/components/FeedbackWidget'
-import { loadSiteTheme, buildThemeStyleTag } from '../lib/theme-loader'
+import { loadSiteTheme, buildThemeStyleTag, buildGa4Snippet } from '../lib/theme-loader'
 
 import { MotionProvider } from "@infosiva/shared-ui/modern";
 export const metadata: Metadata = {
   metadataBase: new URL('https://billslash.app'),
   title: 'BillSlash — AI Bill Negotiator | Cut Your Bills in Minutes',
-  description: 'AI generates word-for-word negotiation scripts for your rent, phone, internet, insurance, and subscription bills. Copy, send, save. Average saving: $40/mo.',
+  description: 'AI generates word-for-word negotiation scripts for your rent, phone, internet, insurance, and subscription bills. Copy, send, save.',
   keywords: 'bill negotiation, lower bills, rent negotiation, phone bill, internet bill, negotiate bills AI',
   openGraph: {
     title: 'BillSlash — AI Bill Negotiator',
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const theme = await loadSiteTheme('billslash')
-  const themeStyle = buildThemeStyleTag(theme, { background: '#f8fafc', primary: '#2563eb', secondary: '#16a34a' })
+  const themeStyle = buildThemeStyleTag(theme, { background: '#fff7f5', primary: '#be185d', secondary: '#f59e0b' })
 
   return (
     <html lang="en">
@@ -60,11 +60,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 '@type': 'Offer',
                 price: '0',
                 priceCurrency: 'USD',
-                description: '2 free negotiations per month',
+                description: 'Free to try, no account required',
               },
             }),
           }}
         />
+      {buildGa4Snippet(theme) && <script dangerouslySetInnerHTML={{ __html: buildGa4Snippet(theme) }} />}
       </head>
       <body>
         <MotionProvider>{children}</MotionProvider>
