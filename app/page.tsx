@@ -54,7 +54,7 @@ export default function HomePage() {
         <div>
           <motion.p {...fade()} className="bs-kicker">A 20-minute weekend job</motion.p>
           <motion.h1 {...fade(0.05)}>Spend this weekend <span className="bs-hl">slashing one bill</span></motion.h1>
-          <motion.p {...fade(0.1)} className="bs-sub">Tell BillSlash which bill and who you pay. It writes the email or call script to ask for a lower rate. You send it.</motion.p>
+          <motion.p {...fade(0.1)} className="bs-sub">Pick the bill. BillSlash writes the email or call script asking for a lower rate. You send it.</motion.p>
           <motion.div {...fade(0.15)}>
             <Link href="/negotiate" className="bs-cta btn-primary">Write my script</Link>
             <p className="bs-note">Free to try, no account needed. Results are not guaranteed.</p>

@@ -29,7 +29,13 @@ Note: /negotiate keeps dark nav + dark tiles on light page (visual mismatch, not
 - Others (supply chain, poisoning, embeddings, misinformation): not assessed.
 
 
-## ANIMATED SCOPE (gate items 19/21, derived from code 2026-10-07)
-- Moves: AnimatedBg (ambient hero/background); CSS keyframes: billbot-slide-bottom, billbot-slide-up, blink, bs-blink, bs-drift, ds-float, ds-shift, fadeIn; transitions on interactive elements.
-- Trigger: page load (ambient) and hover/press (interactive). Reduced motion: honoured via prefers-reduced-motion block.
-- STATUS: scope documented from existing code only. Skill-stack passes (ui-ux-pro-max, emil-design-eng, impeccable critique, review-animations) and 375/1280 screenshot review are NOT yet run for this app. Item 21 stays OPEN until they are.
+## ANIMATED SCOPE (gate items 19/21, 2026-10-07)
+- Moves: (1) hero aurora/mesh background `.bs-bg` drifts slowly (bs-drift, 20s) for ambience; (2) typed example script plus caret (bs-blink) shows the product output; (3) hero entry fade/slide via motion (0.4s, 30-80ms stagger) so the eye lands on headline then CTA; (4) press scale 0.97 on `.btn-primary`, `.btn-ghost`, `.bs-tile` for tactile feedback; hover lift gated to `(hover: hover) and (pointer: fine)`.
+- Trigger: page load (ambient, entry, typing) and press/hover (interactive). Transform and opacity only, ease-out cubic-bezier(0.23,1,0.32,1), UI under 300ms.
+- Reduced motion: `@media (prefers-reduced-motion: reduce)` zeroes all animation durations and transitions globally, plus explicit `.bs-bg`, `.bs-caret`, fade classes and press scale off; motion `useReducedMotion()` shows the full script instantly.
+- Changes this pass: gradient CTA (#be185d to #9d174d) with tinted shadow, green/amber text darkened for 4.5:1, footer links 44px, `100dvh` + `overflow-x: clip`, hero subtext cut to under 20 words and removed stale layout wording.
+- Impeccable detect: ran on app/page.tsx (clean) and app/globals.css (1 finding: overused font Inter; kept, brand stack in design lock, no new deps).
+- Verified: 375x812 and 1280x800 screenshots after last edit read; scrollWidth == clientWidth at both; CTA bottom 390px/489px (above fold); contrast measured by script, all pairs >= 4.5:1 (white on CTA gradient hand-checked at both stops).
+- Caveat: pre-existing floating Feedback pill sits close to the chat FAB at 375; not changed.
+
+SKILL-STACK: done
