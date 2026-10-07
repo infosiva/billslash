@@ -55,14 +55,14 @@ export default function BillBot() {
     position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9998,
     width: '100%', height: `calc(100dvh - ${BOTTOM_OFFSET}px)`,
     borderRadius: '16px 16px 0 0',
-    background: '#0f1a2e', border: '1px solid rgba(16,185,129,0.25)',
+    background: '#2a0f1c', border: '1px solid rgba(190,24,93,0.25)',
     boxShadow: '0 -8px 40px rgba(0,0,0,0.8)',
     display: 'flex', flexDirection: 'column', overflow: 'hidden',
     animation: 'billbot-slide-bottom 0.3s cubic-bezier(0.23,1,0.32,1)',
   } : {
     position: 'fixed', bottom: 88, right: 24, zIndex: 9998,
     width: 360, height: 500, borderRadius: 16,
-    background: '#0f1a2e', border: '1px solid rgba(16,185,129,0.25)',
+    background: '#2a0f1c', border: '1px solid rgba(190,24,93,0.25)',
     boxShadow: '0 8px 40px rgba(0,0,0,0.7)',
     display: 'flex', flexDirection: 'column', overflow: 'hidden',
     animation: 'billbot-slide-up 0.22s ease-out',
@@ -81,9 +81,9 @@ export default function BillBot() {
         style={{
           position: 'fixed', bottom: 24, right: 24, zIndex: 9999,
           width: 52, height: 52, borderRadius: '50%',
-          background: '#10b981', border: 'none', cursor: 'pointer',
+          background: '#be185d', border: 'none', cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 22, boxShadow: '0 4px 20px rgba(16,185,129,0.4)',
+          fontSize: 22, boxShadow: '0 4px 20px rgba(190,24,93,0.4)',
           transition: 'transform 150ms, box-shadow 150ms',
         }}
         onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
@@ -97,10 +97,10 @@ export default function BillBot() {
         <div style={panelStyle}>
           {/* Header */}
           <div style={{ flexShrink: 0, padding: '14px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>💚</div>
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(190,24,93,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>💚</div>
             <div>
               <div style={{ fontSize: 14, fontWeight: 700, color: '#f1f5f9' }}>BillBot</div>
-              <div style={{ fontSize: 11, color: '#10b981' }}>● Online — bill negotiation expert</div>
+              <div style={{ fontSize: 11, color: '#be185d' }}>● Online — bill negotiation expert</div>
             </div>
           </div>
 
@@ -110,7 +110,7 @@ export default function BillBot() {
               <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start' }}>
                 <div style={{
                   maxWidth: '80%', padding: '8px 12px', borderRadius: m.role === 'user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
-                  background: m.role === 'user' ? '#10b981' : 'rgba(255,255,255,0.06)',
+                  background: m.role === 'user' ? '#be185d' : 'rgba(255,255,255,0.06)',
                   color: m.role === 'user' ? '#000' : '#e2e8f0',
                   fontSize: 13, lineHeight: 1.5,
                 }}>
@@ -121,7 +121,7 @@ export default function BillBot() {
             {loading && (
               <div style={{ display: 'flex', gap: 4, padding: '8px 12px' }}>
                 {[0, 1, 2].map(i => (
-                  <div key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', animation: `billbot-slide-up 0.6s ${i * 0.15}s infinite alternate` }} />
+                  <div key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: '#be185d', animation: `billbot-slide-up 0.6s ${i * 0.15}s infinite alternate` }} />
                 ))}
               </div>
             )}
@@ -145,7 +145,7 @@ export default function BillBot() {
               onClick={send}
               disabled={!input.trim() || loading}
               style={{
-                background: '#10b981', border: 'none', borderRadius: 8,
+                background: '#be185d', border: 'none', borderRadius: 8,
                 width: 36, height: 36, cursor: 'pointer', fontSize: 16,
                 opacity: !input.trim() || loading ? 0.5 : 1,
                 transition: 'opacity 150ms, transform 100ms',

@@ -1,12 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Groq from 'groq-sdk'
+import { complete } from '@/lib/llm'
 import { AI_LIMITER } from '@/lib/rateLimit'
-
-let _groq: Groq | null = null
-function getGroq() {
-  if (!_groq) _groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
-  return _groq
-}
 
 const PLAYBOOKS: Record<string, string> = {
   rent: `You are an expert tenant negotiator. Focus on:
@@ -92,18 +86,11 @@ ${reason ? `- Leverage/context: ${reason}` : ''}
 
 Write the complete, ready-to-send script. Be specific to ${provider}. Include realistic numbers where possible. Do NOT include any preamble or explanation — just the script itself.`
 
-    const completion = await getGroq().chat.completions.create({
-      model: 'openai/gpt-oss-20b',
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 600,
-      temperature: 0.7,
-    })
-
-    const script = completion.choices[0]?.message?.content || ''
+    const script = await complete([{ role: 'user', content: prompt }], 600, 0.7)
     return NextResponse.json({ script })
 
   } catch (err) {
     console.error('generate error:', err)
-    return NextResponse.json({ error: 'Failed to generate script' }, { status: 500 })
+    return NextResponse.json({ script: '', error: 'Failed to generate script' })
   }
 }

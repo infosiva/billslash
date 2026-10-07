@@ -1,13 +1,7 @@
 import { reportToTaskFlow } from '@/lib/reportToTaskFlow'
 import { NextRequest, NextResponse } from 'next/server'
-import Groq from 'groq-sdk'
+import { complete } from '@/lib/llm'
 import { AI_LIMITER } from '@/lib/rateLimit'
-
-let _groq: Groq | null = null
-function getGroq() {
-  if (!_groq) _groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
-  return _groq
-}
 
 const SYSTEM_PROMPT = `You are BillBot, an expert bill negotiation assistant on BillSlash.
 
@@ -38,29 +32,7 @@ export async function POST(req: NextRequest) {
       ...messages.slice(-8),
     ]
 
-    let content = ''
-    try {
-      const completion = await getGroq().chat.completions.create({
-        model: 'qwen/qwen3.8-27b',
-        messages: chatMessages,
-        max_tokens: 300,
-        temperature: 0.6,
-      })
-      content = completion.choices[0]?.message?.content || ''
-    } catch (groqErr) {
-      console.warn('chatbot groq failed, trying fallback model', groqErr)
-      try {
-        const completion = await getGroq().chat.completions.create({
-          model: 'openai/gpt-oss-20b',
-          messages: chatMessages,
-          max_tokens: 300,
-          temperature: 0.6,
-        })
-        content = completion.choices[0]?.message?.content || ''
-      } catch (fallbackErr) {
-        console.error('chatbot fallback also failed', fallbackErr)
-      }
-    }
+    const content = await complete(chatMessages as Parameters<typeof complete>[0], 300)
 
     if (!content) {
       return NextResponse.json({ content: "Chat is resting — try again in a moment." })

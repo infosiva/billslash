@@ -5,7 +5,7 @@ export const metadata = {
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <section style={{ marginBottom: 32 }}>
-    <h2 style={{ fontSize: 20, fontWeight: 700, color: '#2563eb', marginBottom: 12 }}>{title}</h2>
+    <h2 style={{ fontSize: 20, fontWeight: 700, color: '#be185d', marginBottom: 12 }}>{title}</h2>
     <div style={{ color: '#374151', lineHeight: 1.7, fontSize: 15 }}>{children}</div>
   </section>
 )
@@ -31,13 +31,13 @@ export default function PrivacyPage() {
         <p>Bill and provider data is not retained after your session. Generated scripts are not saved on our servers.</p>
       </Section>
       <Section title="Your Rights">
-        <p>Email <a href="mailto:privacy@billslash.app" style={{ color: '#2563eb' }}>privacy@billslash.app</a> to request deletion of any data we hold about you.</p>
+        <p>Email <a href="mailto:privacy@billslash.app" style={{ color: '#be185d' }}>privacy@billslash.app</a> to request deletion of any data we hold about you.</p>
       </Section>
       <Section title="Children&apos;s Privacy">
         <p>This service is not directed at children under 13. We do not knowingly collect data from minors.</p>
       </Section>
       <Section title="Contact">
-        <p>Questions about this policy? Email <a href="mailto:privacy@billslash.app" style={{ color: '#2563eb' }}>privacy@billslash.app</a></p>
+        <p>Questions about this policy? Email <a href="mailto:privacy@billslash.app" style={{ color: '#be185d' }}>privacy@billslash.app</a></p>
       </Section>
     </main>
   )

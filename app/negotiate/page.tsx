@@ -70,13 +70,13 @@ function NegotiateContent() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
         <Link href="/" style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', color: '#f1f5f9', textDecoration: 'none' }}>
-          Bill<span style={{ color: '#10b981' }}>Slash</span>
+          Bill<span style={{ color: '#be185d' }}>Slash</span>
         </Link>
         <div style={{ display: 'flex', gap: 8 }}>
           {['pick', 'form', 'result'].map((s, i) => (
             <div key={s} style={{
               width: 24, height: 4, borderRadius: 2,
-              background: ['pick', 'form', 'result'].indexOf(step) >= i ? '#10b981' : 'rgba(255,255,255,0.1)',
+              background: ['pick', 'form', 'result'].indexOf(step) >= i ? '#be185d' : 'rgba(255,255,255,0.1)',
               transition: 'background 300ms',
             }} />
           ))}
@@ -211,9 +211,9 @@ function NegotiateContent() {
                       onClick={() => setFormData(f => ({ ...f, scriptType: type }))}
                       style={{
                         flex: 1, padding: '10px', borderRadius: 8, cursor: 'pointer', fontSize: 14, fontWeight: 600,
-                        border: formData.scriptType === type ? '1px solid #10b981' : '1px solid rgba(255,255,255,0.1)',
+                        border: formData.scriptType === type ? '1px solid #be185d' : '1px solid rgba(255,255,255,0.1)',
                         background: formData.scriptType === type ? 'rgba(16,185,129,0.1)' : '#111827',
-                        color: formData.scriptType === type ? '#10b981' : '#64748b',
+                        color: formData.scriptType === type ? '#be185d' : '#64748b',
                         transition: 'all 150ms',
                       }}
                     >
@@ -233,7 +233,7 @@ function NegotiateContent() {
             </form>
 
             <p style={{ fontSize: 12, color: '#334155', textAlign: 'center', marginTop: 12 }}>
-              2 free scripts/month · No account required
+              Free to try · No account required
             </p>
           </div>
         )}
@@ -291,7 +291,7 @@ function NegotiateContent() {
                   background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.15)',
                   borderRadius: 10, padding: '14px 16px', marginTop: 16,
                 }}>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: '#10b981', marginBottom: 4 }}>💡 Pro tips</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#be185d', marginBottom: 4 }}>💡 Pro tips</div>
                   <ul style={{ fontSize: 13, color: '#64748b', paddingLeft: 16, lineHeight: 1.8 }}>
                     <li>Send during business hours for best response rate</li>
                     <li>If no reply in 3 days, follow up once</li>

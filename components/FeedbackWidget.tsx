@@ -38,7 +38,7 @@ export default function FeedbackWidget({ siteName = 'this site' }: { siteName?: 
       ) : (
         <>
           <textarea value={text} onChange={e=>setText(e.target.value)} placeholder={`What do you think of ${siteName}?`} rows={3} style={{ border:'1px solid #e2e8f0', borderRadius:8, padding:'8px 10px', fontSize:13, resize:'none', outline:'none', fontFamily:'inherit' }} />
-          <button onClick={submit} disabled={sending || !text.trim()} style={{ background:'#2563eb', color:'#fff', border:'none', borderRadius:8, padding:'8px 0', fontSize:13, fontWeight:600, cursor:'pointer', opacity: sending || !text.trim() ? 0.5 : 1 }}>
+          <button onClick={submit} disabled={sending || !text.trim()} style={{ background:'#be185d', color:'#fff', border:'none', borderRadius:8, padding:'8px 0', fontSize:13, fontWeight:600, cursor:'pointer', opacity: sending || !text.trim() ? 0.5 : 1 }}>
             {sending ? 'Sending...' : 'Send'}
           </button>
         </>
