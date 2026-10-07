@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import './globals.css'
-import BillBot from '../components/BillBot'
+import ChatBot from '../components/BillBot'
 import FeedbackWidget from '@/components/FeedbackWidget'
 import { loadSiteTheme, buildThemeStyleTag, buildGa4Snippet } from '../lib/theme-loader'
 
+import { AnimatedBg } from "@/components/AnimatedBg"
 import { MotionProvider } from "@infosiva/shared-ui/modern";
 export const metadata: Metadata = {
   metadataBase: new URL('https://billslash.app'),
@@ -68,8 +69,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       {buildGa4Snippet(theme) && <script dangerouslySetInnerHTML={{ __html: buildGa4Snippet(theme) }} />}
       </head>
       <body>
+        <AnimatedBg theme={theme} fallback="none" />
         <MotionProvider>{children}</MotionProvider>
-        <BillBot />
+        <ChatBot />
         <FeedbackWidget siteName="BillSlash" />
       </body>
     </html>
