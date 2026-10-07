@@ -1,3 +1,4 @@
+import { sanitizeUserInput } from '@/lib/guard'
 import { reportToTaskFlow } from '@/lib/reportToTaskFlow'
 import { NextRequest, NextResponse } from 'next/server'
 import { complete } from '@/lib/llm'
@@ -22,6 +23,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const { messages } = await req.json()
+    for (const m of Array.isArray(messages) ? messages : []) if (m && typeof m.content === 'string') m.content = sanitizeUserInput(m.content).text
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json({ error: 'Invalid messages' }, { status: 400 })
